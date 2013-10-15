@@ -10,8 +10,10 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @ratings = params[:ratings]
     if @ratings
-      @movies = Movie.where(:rating => @ratings.keys)
+      @ratings = @ratings.keys if @ratings.is_a? Hash
+      @movies = Movie.where(:rating => @ratings)
     else
+      @ratings = @all_ratings
       @movies = Movie.scoped
     end
 
