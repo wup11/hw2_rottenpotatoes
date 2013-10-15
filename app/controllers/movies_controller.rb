@@ -7,15 +7,21 @@ class MoviesController < ApplicationController
   end
 
   def index
-    sort_by = params[:sort_by]
-    if sort_by == 'title'
-      @movies = Movie.order('title').all
-      @highlight = 'title'
-    elsif sort_by == 'date'
-      @movies = Movie.order('release_date').all
-      @highlight = 'date'
+    @all_ratings = Movie.all_ratings
+    @ratings = params[:ratings]
+    if @ratings
+      @movies = Movie.where(:rating => @ratings.keys)
     else
-      @movies = Movie.all
+      @movies = Movie.scoped
+    end
+
+    @sort_by = params[:sort_by]
+    if @sort_by == 'title'
+      @movies = @movies.order('title').all
+    elsif @sort_by == 'date'
+      @movies = @movies.order('release_date').all
+    else
+      @movies = @movies.all
     end
   end
 
